@@ -1,0 +1,15 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+
+    int gelensayi = (int)(ViewData["Sayi"]); 
+}
+<h1>Yöntem 1 Sayfası burası</h1>
+<b>Cümle:</b>
+
+<br />
+@ViewData["Metin"]
+<br />
+<b>Gelen sayinin yarisi:</b>
+@(gelensayi/2)

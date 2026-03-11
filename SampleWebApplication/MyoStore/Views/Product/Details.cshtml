@@ -1,0 +1,54 @@
+@model MyoStore.Models.Product
+
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/Product">Ürünler</a></li>
+            <li class="breadcrumb-item"><a href="/Product?categoryId=@Model.CategoryId">@Model.Category?.Name</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.Name</li>
+        </ol>
+    </nav>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h1>@Model.Name</h1>
+                    <p class="text-muted">@Model.Description</p>
+                    
+                    <div class="row mt-4">
+                        <div class="col-md-6">
+                            <h3 class="text-success">@Model.Price.ToString("N0") TL</h3>
+                        </div>
+                        <div class="col-md-6">
+                            <p class="@(Model.Stock > 10 ? "text-success" : "text-warning")">
+                                <strong>Stok:</strong> @(Model.Stock > 0 ? Model.Stock + " adet" : "Stokta yok")
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <form action="/Cart/Add" method="post">
+                            <input type="hidden" name="productId" value="@Model.Id" />
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label class="form-label">Adet:</label>
+                                    <input type="number" name="quantity" value="1" min="1" max="@Model.Stock" class="form-control">
+                                </div>
+                                <div class="col-md-8 d-flex align-items-end">
+                                    <button type="submit" class="btn btn-success w-100" @(Model.Stock <= 0 ? "disabled" : "")>
+                                        Sepete Ekle
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="mt-4">
+                        <a href="/Product" class="btn btn-outline-secondary">Ürünlere Dön</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

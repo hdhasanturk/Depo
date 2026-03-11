@@ -1,0 +1,143 @@
+@model List<MyoStore.Models.Product>
+@{
+    ViewData["Title"] = "MyoStore";
+    Layout = "_MyStoreLayout";
+}
+
+<style>
+    .store-container {
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        gap: 20px;
+        padding: 20px;
+        box-sizing: border-box;
+    }
+
+    .store-filter {
+        border-right: 1px solid #ccc;
+        padding-right: 16px;
+    }
+
+    .store-filter h2 {
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+    }
+
+    .store-filter ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .store-filter li {
+        margin-bottom: 6px;
+    }
+
+    .store-filter a {
+        text-decoration: none;
+        color: #333;
+    }
+
+    .store-filter a:hover {
+        text-decoration: underline;
+    }
+
+    .store-products h2 {
+        margin-bottom: 12px;
+    }
+
+    .product-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 16px;
+    }
+
+    .product-card {
+        border: 1px solid #ddd;
+        padding: 10px;
+        border-radius: 4px;
+        transition: box-shadow 0.3s;
+    }
+
+    .product-card:hover {
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .product-card h3 {
+        font-size: 1rem;
+        margin-bottom: 6px;
+    }
+
+    .product-card p {
+        margin: 0;
+        font-size: 0.9rem;
+    }
+    
+    .product-card .price {
+        color: #28a745;
+        font-weight: bold;
+    }
+    
+    .product-card img {
+        width: 100%;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 4px;
+    }
+    
+    .product-card .btn-group {
+        margin-top: 8px;
+    }
+    
+    .product-card .btn-group a,
+    .product-card .btn-group form button {
+        font-size: 0.8rem;
+    }
+</style>
+
+<div class="store-container">
+    <aside class="store-filter">
+        <h2>Kategoriler</h2>
+        <ul>
+            <li><a href="/Product">Tüm Ürünler</a></li>
+            @foreach (var category in ViewBag.Categories)
+            {
+                <li><a href="/Product?categoryId=@category.Id">@category.Name</a></li>
+            }
+        </ul>
+    </aside>
+
+    <main class="store-products">
+        <h2>Öne Çıkan Ürünler</h2>
+
+        @if (Model.Count == 0)
+        {
+            <p>Henüz ürün bulunmamaktadır.</p>
+        }
+        else
+        {
+            <div class="product-list">
+                @foreach (var product in Model)
+                {
+                    <div class="product-card">
+                        <h3>@product.Name</h3>
+                        <p>@product.Category?.Name</p>
+                        <p class="price">@product.Price.ToString("N0") TL</p>
+                        <div class="btn-group">
+                            <a href="/Product/Details/@product.Id" class="btn btn-sm btn-primary">Detay</a>
+                            <form action="/Cart/Add" method="post">
+                                <input type="hidden" name="productId" value="@product.Id" />
+                                <input type="hidden" name="quantity" value="1" />
+                                <button type="submit" class="btn btn-sm btn-success">Sepete Ekle</button>
+                            </form>
+                        </div>
+                    </div>
+                }
+            </div>
+            
+            <div style="margin-top: 20px;">
+                <a href="/Product" class="btn btn-outline-primary">Tüm Ürünleri Gör</a>
+            </div>
+        }
+    </main>
+</div>
